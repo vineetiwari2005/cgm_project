@@ -68,6 +68,18 @@ void updateGameLogic(int value); // Renamed from animation_loop
 void renderScene(); // New function for all drawing
 void handleInput(unsigned char key, int x, int y); // New function for input
 
+
+void initGraphics() {
+    GLubyte grassPattern[2 * 2][3] = { {34, 139, 34}, {0, 100, 0}, {0, 100, 0}, {34, 139, 34} };
+    glGenTextures(1, &grassTextureID); glBindTexture(GL_TEXTURE_2D, grassTextureID);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_UNSIGNED_BYTE, grassPattern);
+    glEnable(GL_LIGHTING); glEnable(GL_LIGHT0); glEnable(GL_COLOR_MATERIAL);
+    GLfloat light_pos[] = { 0.0f, 5.0f, 5.0f, 1.0f }; glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+    glShadeModel(GL_SMOOTH);
+}
+
 void renderScene() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
@@ -128,4 +140,5 @@ void handleInput(unsigned char key, int x, int y) {
             if (key == ' ' || key == 13) { resetGame(); game_state = WAITING_FOR_SHOT; } break;
     }
     glutPostRedisplay(); // Request redraw if state might have changed visually
+
 }
