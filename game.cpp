@@ -280,6 +280,26 @@ void advanceRound()
     }
 
 }
+/**
+ * @brief Resets game state variables. (Implementation unchanged)
+ */
+void resetGame()
+{
+    player_goals = 0;
+    ai_goals = 0;
+    current_round = 1;
+    is_player_turn = true;
+    game_state = INTRO;
+    player_dive_choice = NONE;
+    player_shot_choice = MIDDLE;
+    ball_x = GK_CENTER_X;
+    ball_y = BALL_Y;
+    ball_z = PENALTY_SPOT_Z;
+    gk_x = GK_CENTER_X;
+    gk_y = GROUND_Y + GK_BODY_Y_OFFSET;
+    gk_z = GOAL_LINE_Z;
+    animation_steps = 0;
+}
 
 /**
  * @brief Handles time-based updates, primarily animation.
