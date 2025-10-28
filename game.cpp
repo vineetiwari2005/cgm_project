@@ -278,4 +278,31 @@ void advanceRound()
             game_state = WAITING_FOR_SHOT;
         }
     }
+
+}
+
+/**
+ * @brief Handles time-based updates, primarily animation.
+ */
+void updateGameLogic(int value) {
+    if (game_state != SHOT_IN_PROGRESS || animation_steps == 0) return;
+
+    if (animation_steps <= TOTAL_ANIMATION_STEPS) {
+        float t = (float)animation_steps / (float)TOTAL_ANIMATION_STEPS;
+        float t_ball = t * t; float t_gk = t;
+        ball_x = (1.0f - t_ball) * start_ball_x + t_ball * target_ball_x;
+        ball_z = (1.0f - t_ball) * start_ball_z + t_ball * GOAL_LINE_Z;
+        ball_y = BALL_Y;
+        gk_x = (1.0f - t_gk) * start_gk_x + t_gk * target_gk_x;
+        gk_y = GROUND_Y + GK_BODY_Y_OFFSET;
+        animation_steps++;
+        glutTimerFunc(ANIMATION_TIMER_MS, updateGameLogic, 0); // Continue loop
+    } else {
+        // Animation finished: Determine result and change state
+        game_state = DISPLAY_RESULT;
+        ball_x = target_ball_x; ball_z = GOAL_LINE_Z; gk_x = target_gk_x;
+        if (is_player_turn) { last_shot_was_goal = (player_shot_choice != ai_dive_choice); if (last_shot_was_goal) player_goals++; }
+        else { last_shot_was_goal = (ai_shot_choice != player_dive_choice); if (last_shot_was_goal) ai_goals++; }
+    }
+    glutPostRedisplay(); // Request redraw after state change
 }
