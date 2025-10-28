@@ -37,6 +37,25 @@ const float GOAL_HEIGHT = 2.0f;
 const float POST_THICKNESS = 0.1f;
 const float NET_DEPTH = 1.5f;
 
+// --- Game State Enums ---
+enum GameState { INTRO, WAITING_FOR_SHOT, WAITING_FOR_DIVE, SHOT_IN_PROGRESS, DISPLAY_RESULT, GAME_OVER };
+enum Direction { LEFT, MIDDLE, RIGHT, NONE };
+
+// --- Global State Variables ---
+GameState game_state = INTRO;
+int player_goals = 0, ai_goals = 0, current_round = 1;
+bool is_player_turn = true, last_shot_was_goal = false;
+Direction player_shot_choice = MIDDLE, player_dive_choice = NONE;
+Direction ai_shot_choice = MIDDLE, ai_dive_choice = MIDDLE;
+float ball_x = GK_CENTER_X, ball_y = BALL_Y, ball_z = PENALTY_SPOT_Z;
+float gk_x = GK_CENTER_X, gk_y = GROUND_Y + GK_BODY_Y_OFFSET, gk_z = GOAL_LINE_Z;
+float target_ball_x = GK_CENTER_X, target_gk_x = GK_CENTER_X;
+float start_ball_x = GK_CENTER_X, start_ball_z = PENALTY_SPOT_Z, start_gk_x = GK_CENTER_X;
+int animation_steps = 0;
+GLuint grassTextureID;
+int window_width = 800, window_height = 600;
+
+
 void renderScene() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
@@ -69,3 +88,4 @@ void renderScene() {
 
     glutSwapBuffers();
 }
+
