@@ -241,7 +241,41 @@ void drawUI() {
 }
 
 
-
-
-
-
+/**
+ * @brief Advances the game state. (Implementation unchanged)
+ */
+void advanceRound()
+{
+    ball_x = GK_CENTER_X;
+    ball_y = BALL_Y;
+    ball_z = PENALTY_SPOT_Z;
+    gk_x = GK_CENTER_X;
+    gk_z = GOAL_LINE_Z;
+    gk_y = GROUND_Y + GK_BODY_Y_OFFSET;
+    animation_steps = 0;
+    player_dive_choice = NONE;
+    if (is_player_turn)
+    {
+        is_player_turn = false;
+        game_state = WAITING_FOR_DIVE;
+    }
+    else
+    {
+        is_player_turn = true;
+        if (current_round >= MAX_ROUNDS)
+        {
+            if (player_goals != ai_goals)
+                game_state = GAME_OVER;
+            else
+            {
+                current_round++;
+                game_state = WAITING_FOR_SHOT;
+            }
+        }
+        else
+        {
+            current_round++;
+            game_state = WAITING_FOR_SHOT;
+        }
+    }
+}
