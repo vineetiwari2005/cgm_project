@@ -342,3 +342,30 @@ void updateGameLogic(int value) {
     glutPostRedisplay(); // Request redraw after state change
 }
 
+// --- Main Function and GLUT Setup ---
+
+int main(int argc, char **argv)
+{
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitWindowSize(window_width, window_height);
+    glutInitWindowPosition(100, 100);
+    glutCreateWindow("Penalty Shootout 3D - Refactored");
+
+    srand(static_cast<unsigned int>(time(NULL)));
+
+    initGraphics();
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(0.0f, 0.2f, 0.4f, 1.0f); // Sky blue
+
+    // Register callbacks to the new primary functions
+    glutDisplayFunc(renderScene); // Drawing function
+    glutReshapeFunc(reshape);
+    glutKeyboardFunc(handleInput); // Input function
+    // The timer is started initially by handleInput calling startAnimation,
+    // which then calls updateGameLogic recursively via glutTimerFunc.
+
+    resetGame();
+    glutMainLoop();
+    return 0;
+}
