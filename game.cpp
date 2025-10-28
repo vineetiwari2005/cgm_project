@@ -112,6 +112,21 @@ void reshape(int w, int h) {
     gluPerspective(45.0f, aspect, 0.1f, 100.0f); glMatrixMode(GL_MODELVIEW);
 }
 
+/**
+ * @brief Utility function to draw 2D text overlay. (Implementation unchanged)
+ */
+void drawText_2D(float x, float y, const char string, void font) {
+    glMatrixMode(GL_PROJECTION); glPushMatrix(); glLoadIdentity();
+    gluOrtho2D(0, window_width, 0, window_height);
+    glMatrixMode(GL_MODELVIEW); glPushMatrix(); glLoadIdentity();
+    glDisable(GL_DEPTH_TEST); glDisable(GL_LIGHTING);
+    glColor3f(1.0f, 1.0f, 1.0f); glRasterPos2f(x, y);
+    while (*string) { glutBitmapCharacter(font, *string++); }
+    glEnable(GL_DEPTH_TEST); glEnable(GL_LIGHTING);
+    glMatrixMode(GL_PROJECTION); glPopMatrix();
+    glMatrixMode(GL_MODELVIEW); glPopMatrix();
+}
+
 void renderScene() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
@@ -326,3 +341,4 @@ void updateGameLogic(int value) {
     }
     glutPostRedisplay(); // Request redraw after state change
 }
+
