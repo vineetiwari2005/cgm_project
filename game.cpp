@@ -176,5 +176,50 @@ void drawPlayerFigure(float x, float y_base, float z, float r, float g, float b,
     glColor3f(r, g, b); glPushMatrix(); glTranslatef(x + torso_width/2.0f + limb_length/2.0f, y_base + torso_height * 0.7f, z); glScalef(limb_length, PLAYER_LIMB_THICKNESS, PLAYER_LIMB_THICKNESS); glutSolidCube(1.0); glPopMatrix(); glPushMatrix(); glTranslatef(x - torso_width/2.0f - limb_length/2.0f, y_base + torso_height * 0.7f, z); glScalef(limb_length, PLAYER_LIMB_THICKNESS, PLAYER_LIMB_THICKNESS); glutSolidCube(1.0); glPopMatrix();
     glColor3f(r * 0.5f, g * 0.5f, b * 0.5f); glPushMatrix(); glTranslatef(x + torso_width * 0.2f, y_base + limb_length / 2.0f, z); glScalef(PLAYER_LIMB_THICKNESS, limb_length, PLAYER_LIMB_THICKNESS); glutSolidCube(1.0); glPopMatrix(); glPushMatrix(); glTranslatef(x - torso_width * 0.2f, y_base + limb_length / 2.0f, z); glScalef(PLAYER_LIMB_THICKNESS, limb_length, PLAYER_LIMB_THICKNESS); glutSolidCube(1.0); glPopMatrix();
 }
+/**
+ * @brief Helper function to set targets and start animation timer. (Implementation unchanged)
+ */
+void startAnimation()
+{
+    if (animation_steps != 0)
+        return;
+    animation_steps = 1;
+    if (is_player_turn)
+    {
+        ai_dive_choice = (Direction)(rand() % 3);
+        if (player_shot_choice == LEFT)
+            target_ball_x = GK_LEFT_X;
+        else if (player_shot_choice == RIGHT)
+            target_ball_x = GK_RIGHT_X;
+        else
+            target_ball_x = GK_CENTER_X;
+        if (ai_dive_choice == LEFT)
+            target_gk_x = GK_LEFT_X;
+        else if (ai_dive_choice == RIGHT)
+            target_gk_x = GK_RIGHT_X;
+        else
+            target_gk_x = GK_CENTER_X;
+    }
+    else
+    {
+        ai_shot_choice = (Direction)(rand() % 3);
+        if (ai_shot_choice == LEFT)
+            target_ball_x = GK_LEFT_X;
+        else if (ai_shot_choice == RIGHT)
+            target_ball_x = GK_RIGHT_X;
+        else
+            target_ball_x = GK_CENTER_X;
+        if (player_dive_choice == LEFT)
+            target_gk_x = GK_LEFT_X;
+        else if (player_dive_choice == RIGHT)
+            target_gk_x = GK_RIGHT_X;
+        else
+            target_gk_x = GK_CENTER_X;
+    }
+    start_ball_x = ball_x;
+    start_ball_z = ball_z;
+    start_gk_x = gk_x;
+    glutTimerFunc(ANIMATION_TIMER_MS, updateGameLogic, 0); // Call the logic update function
+}
 
 
