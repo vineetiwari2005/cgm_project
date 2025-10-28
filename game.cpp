@@ -80,6 +80,29 @@ void initGraphics() {
     glShadeModel(GL_SMOOTH);
 }
 
+/**
+ * @brief Draws the static 3D scene elements. (Implementation unchanged)
+ */
+void drawScene() {
+    glEnable(GL_TEXTURE_2D); glBindTexture(GL_TEXTURE_2D, grassTextureID);
+    glColor3f(0.8f, 0.8f, 0.8f); glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f);   glVertex3f(-20.0f, GROUND_Y, 10.0f);
+    glTexCoord2f(40.0f, 0.0f);  glVertex3f( 20.0f, GROUND_Y, 10.0f);
+    glTexCoord2f(40.0f, 40.0f); glVertex3f( 20.0f, GROUND_Y, -20.0f);
+    glTexCoord2f(0.0f, 40.0f);  glVertex3f(-20.0f, GROUND_Y, -20.0f);
+    glEnd(); glDisable(GL_TEXTURE_2D);
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glPushMatrix(); glTranslatef(-GOAL_WIDTH / 2, GROUND_Y + GOAL_HEIGHT / 2, GOAL_LINE_Z); glScalef(POST_THICKNESS, GOAL_HEIGHT, POST_THICKNESS); glutSolidCube(1.0); glPopMatrix();
+    glPushMatrix(); glTranslatef( GOAL_WIDTH / 2, GROUND_Y + GOAL_HEIGHT / 2, GOAL_LINE_Z); glScalef(POST_THICKNESS, GOAL_HEIGHT, POST_THICKNESS); glutSolidCube(1.0); glPopMatrix();
+    glPushMatrix(); glTranslatef(0.0f, GROUND_Y + GOAL_HEIGHT, GOAL_LINE_Z); glScalef(GOAL_WIDTH + POST_THICKNESS, POST_THICKNESS, POST_THICKNESS); glutSolidCube(1.0); glPopMatrix();
+    glColor3f(0.8f, 0.8f, 0.8f); glLineWidth(1.0); glDisable(GL_LIGHTING); glBegin(GL_LINES);
+    for (float x = -GOAL_WIDTH / 2; x <= GOAL_WIDTH / 2; x += 0.4f) { glVertex3f(x, GROUND_Y, GOAL_LINE_Z); glVertex3f(x, GOAL_HEIGHT, GOAL_LINE_Z); glVertex3f(x, GROUND_Y, GOAL_LINE_Z); glVertex3f(x, GROUND_Y, GOAL_LINE_Z - NET_DEPTH); glVertex3f(x, GOAL_HEIGHT, GOAL_LINE_Z); glVertex3f(x, GOAL_HEIGHT, GOAL_LINE_Z - NET_DEPTH); }
+    for (float y = GROUND_Y; y <= GOAL_HEIGHT; y += 0.4f) { glVertex3f(-GOAL_WIDTH / 2, y, GOAL_LINE_Z); glVertex3f( GOAL_WIDTH / 2, y, GOAL_LINE_Z); glVertex3f(-GOAL_WIDTH / 2, y, GOAL_LINE_Z - NET_DEPTH); glVertex3f( GOAL_WIDTH / 2, y, GOAL_LINE_Z - NET_DEPTH); }
+    glVertex3f(-GOAL_WIDTH / 2, GROUND_Y, GOAL_LINE_Z); glVertex3f(-GOAL_WIDTH / 2, GROUND_Y, GOAL_LINE_Z - NET_DEPTH); glVertex3f( GOAL_WIDTH / 2, GROUND_Y, GOAL_LINE_Z); glVertex3f( GOAL_WIDTH / 2, GROUND_Y, GOAL_LINE_Z - NET_DEPTH); glVertex3f(-GOAL_WIDTH / 2, GOAL_HEIGHT, GOAL_LINE_Z); glVertex3f(-GOAL_WIDTH / 2, GOAL_HEIGHT, GOAL_LINE_Z - NET_DEPTH); glVertex3f( GOAL_WIDTH / 2, GOAL_HEIGHT, GOAL_LINE_Z); glVertex3f( GOAL_WIDTH / 2, GOAL_HEIGHT, GOAL_LINE_Z - NET_DEPTH); glVertex3f(0.0f, GOAL_HEIGHT, GOAL_LINE_Z); glVertex3f(0.0f, GOAL_HEIGHT, GOAL_LINE_Z - NET_DEPTH);
+    glEnd(); glEnable(GL_LIGHTING);
+    glColor3f(1.0, 1.0, 1.0); glLineWidth(2.0); glBegin(GL_LINES); glVertex3f(-0.1, GROUND_Y + 0.01, PENALTY_SPOT_Z); glVertex3f( 0.1, GROUND_Y + 0.01, PENALTY_SPOT_Z); glEnd(); glLineWidth(1.0);
+}
+
 void renderScene() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
@@ -153,4 +176,5 @@ void drawPlayerFigure(float x, float y_base, float z, float r, float g, float b,
     glColor3f(r, g, b); glPushMatrix(); glTranslatef(x + torso_width/2.0f + limb_length/2.0f, y_base + torso_height * 0.7f, z); glScalef(limb_length, PLAYER_LIMB_THICKNESS, PLAYER_LIMB_THICKNESS); glutSolidCube(1.0); glPopMatrix(); glPushMatrix(); glTranslatef(x - torso_width/2.0f - limb_length/2.0f, y_base + torso_height * 0.7f, z); glScalef(limb_length, PLAYER_LIMB_THICKNESS, PLAYER_LIMB_THICKNESS); glutSolidCube(1.0); glPopMatrix();
     glColor3f(r * 0.5f, g * 0.5f, b * 0.5f); glPushMatrix(); glTranslatef(x + torso_width * 0.2f, y_base + limb_length / 2.0f, z); glScalef(PLAYER_LIMB_THICKNESS, limb_length, PLAYER_LIMB_THICKNESS); glutSolidCube(1.0); glPopMatrix(); glPushMatrix(); glTranslatef(x - torso_width * 0.2f, y_base + limb_length / 2.0f, z); glScalef(PLAYER_LIMB_THICKNESS, limb_length, PLAYER_LIMB_THICKNESS); glutSolidCube(1.0); glPopMatrix();
 }
+
 
