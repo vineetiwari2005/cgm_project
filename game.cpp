@@ -222,4 +222,16 @@ void startAnimation()
     glutTimerFunc(ANIMATION_TIMER_MS, updateGameLogic, 0); // Call the logic update function
 }
 
+/**
+ * @brief Draws the scoreboard and UI text. (Implementation unchanged)
+ */
+void drawUI() {
+    if (game_state != INTRO) { std::stringstream ss_round; ss_round << "Round: " << current_round; if (current_round > MAX_ROUNDS) ss_round << " (SUDDEN DEATH)"; else ss_round << " of " << MAX_ROUNDS; drawText_2D(20, window_height - 30, ss_round.str().c_str(), GLUT_BITMAP_HELVETICA_18); std::stringstream ss_score; ss_score << "Player: " << player_goals << "  |  AI: " << ai_goals; drawText_2D(window_width - 180, window_height - 30, ss_score.str().c_str(), GLUT_BITMAP_HELVETICA_18); }
+    float center_x = window_width / 2.0f; float bottom_y = 50;
+    switch (game_state) { case INTRO: drawText_2D(center_x - 100, center_x - 50, "PENALTY SHOOTOUT 3D", GLUT_BITMAP_TIMES_ROMAN_24); drawText_2D(center_x - 110, center_x - 80, "Press SPACE to Start", GLUT_BITMAP_HELVETICA_18); break; case WAITING_FOR_SHOT: drawText_2D(center_x - 50, window_height - 60, "PLAYER KICKS", GLUT_BITMAP_HELVETICA_18); drawText_2D(center_x - 180, bottom_y, "Shoot Directly: [L] Left, [M] Middle, [R] Right", GLUT_BITMAP_HELVETICA_18); break; case WAITING_FOR_DIVE: drawText_2D(center_x - 30, window_height - 60, "AI KICKS", GLUT_BITMAP_HELVETICA_18); drawText_2D(center_x - 180, bottom_y, "Dive Directly: [L] Left, [M] Middle, [R] Right", GLUT_BITMAP_HELVETICA_18); break; case SHOT_IN_PROGRESS: drawText_2D(center_x - 10, bottom_y, "...", GLUT_BITMAP_HELVETICA_18); break; case DISPLAY_RESULT: if (last_shot_was_goal) drawText_2D(center_x - 30, center_x, "GOAL!", GLUT_BITMAP_TIMES_ROMAN_24); else drawText_2D(center_x - 30, center_x, "SAVED!", GLUT_BITMAP_TIMES_ROMAN_24); drawText_2D(center_x - 100, bottom_y, "Press SPACE to continue", GLUT_BITMAP_HELVETICA_18); break; case GAME_OVER: drawText_2D(center_x - 70, center_x + 50, "--- GAME OVER ---", GLUT_BITMAP_TIMES_ROMAN_24); std::stringstream ss_final; ss_final << "Final Score: Player " << player_goals << " - " << ai_goals << " AI"; drawText_2D(center_x - 120, center_x + 20, ss_final.str().c_str(), GLUT_BITMAP_HELVETICA_18); if (player_goals > ai_goals) drawText_2D(center_x - 120, center_x - 10, "WORLD CLASS PERFORMANCE!", GLUT_BITMAP_HELVETICA_18); else if (ai_goals > player_goals) drawText_2D(center_x - 70, center_x - 10, "NEEDS PRACTICE!", GLUT_BITMAP_HELVETICA_18); else drawText_2D(center_x - 70, center_x - 10, "A TIE!", GLUT_BITMAP_HELVETICA_18); drawText_2D(center_x - 140, bottom_y, "Press SPACE or ENTER to play again", GLUT_BITMAP_HELVETICA_18); break; }
+}
+
+
+
+
 
