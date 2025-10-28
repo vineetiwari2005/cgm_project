@@ -142,3 +142,15 @@ void handleInput(unsigned char key, int x, int y) {
     glutPostRedisplay(); // Request redraw if state might have changed visually
 
 }
+
+/**
+ * @brief Draws a more articulated player figure. (Implementation unchanged)
+ */
+void drawPlayerFigure(float x, float y_base, float z, float r, float g, float b, bool is_goalkeeper) {
+    glColor3f(r, g, b); float head_radius = 0.15f; float torso_height = PLAYER_HEIGHT * 0.4f; float limb_length = PLAYER_HEIGHT * 0.3f; float torso_width = PLAYER_BODY_WIDTH; float torso_depth = PLAYER_BODY_DEPTH;
+    glPushMatrix(); glTranslatef(x, y_base + torso_height / 2.0f, z); glScalef(torso_width, torso_height, torso_depth); glutSolidCube(1.0); glPopMatrix();
+    glColor3f(0.9f, 0.7f, 0.6f); glPushMatrix(); glTranslatef(x, y_base + torso_height + head_radius * 0.8f, z); glutSolidSphere(head_radius, 16, 16); glPopMatrix();
+    glColor3f(r, g, b); glPushMatrix(); glTranslatef(x + torso_width/2.0f + limb_length/2.0f, y_base + torso_height * 0.7f, z); glScalef(limb_length, PLAYER_LIMB_THICKNESS, PLAYER_LIMB_THICKNESS); glutSolidCube(1.0); glPopMatrix(); glPushMatrix(); glTranslatef(x - torso_width/2.0f - limb_length/2.0f, y_base + torso_height * 0.7f, z); glScalef(limb_length, PLAYER_LIMB_THICKNESS, PLAYER_LIMB_THICKNESS); glutSolidCube(1.0); glPopMatrix();
+    glColor3f(r * 0.5f, g * 0.5f, b * 0.5f); glPushMatrix(); glTranslatef(x + torso_width * 0.2f, y_base + limb_length / 2.0f, z); glScalef(PLAYER_LIMB_THICKNESS, limb_length, PLAYER_LIMB_THICKNESS); glutSolidCube(1.0); glPopMatrix(); glPushMatrix(); glTranslatef(x - torso_width * 0.2f, y_base + limb_length / 2.0f, z); glScalef(PLAYER_LIMB_THICKNESS, limb_length, PLAYER_LIMB_THICKNESS); glutSolidCube(1.0); glPopMatrix();
+}
+
