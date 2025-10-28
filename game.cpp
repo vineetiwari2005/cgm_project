@@ -55,6 +55,18 @@ int animation_steps = 0;
 GLuint grassTextureID;
 int window_width = 800, window_height = 600;
 
+// --- Forward Declarations ---
+void resetGame();
+void drawText_2D(float x, float y, const char* text, void* font = GLUT_BITMAP_HELVETICA_18);
+void initGraphics();
+void startAnimation();
+void drawPlayerFigure(float x, float y_base, float z, float r, float g, float b, bool is_goalkeeper);
+void drawScene();
+void drawUI();
+void advanceRound();
+void updateGameLogic(int value); // Renamed from animation_loop
+void renderScene(); // New function for all drawing
+void handleInput(unsigned char key, int x, int y); // New function for input
 
 void renderScene() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -89,3 +101,31 @@ void renderScene() {
     glutSwapBuffers();
 }
 
+/**
+ * @brief Handles keyboard input and related game state changes.
+ */
+void handleInput(unsigned char key, int x, int y) {
+    key = tolower(key);
+    switch (game_state) {
+        case INTRO:
+            if (key == ' ') game_state = WAITING_FOR_SHOT; break;
+        case WAITING_FOR_SHOT:
+            if (key == 'l') player_shot_choice = LEFT;
+            else if (key == 'm') player_shot_choice = MIDDLE;
+            else if (key == 'r') player_shot_choice = RIGHT;
+            else break;
+            game_state = SHOT_IN_PROGRESS; startAnimation(); break;
+        case WAITING_FOR_DIVE:
+            if (key == 'l') player_dive_choice = LEFT;
+            else if (key == 'm') player_dive_choice = MIDDLE;
+            else if (key == 'r') player_dive_choice = RIGHT;
+            else break;
+            game_state = SHOT_IN_PROGRESS; startAnimation(); break;
+        case SHOT_IN_PROGRESS: break; // Input ignored during animation
+        case DISPLAY_RESULT:
+            if (key == ' ') advanceRound(); break; // advanceRound changes state
+        case GAME_OVER:
+            if (key == ' ' || key == 13) { resetGame(); game_state = WAITING_FOR_SHOT; } break;
+    }
+    glutPostRedisplay(); // Request redraw if state might have changed visually
+}
